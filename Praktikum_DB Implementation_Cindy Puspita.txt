@@ -1,0 +1,23 @@
+//1 mahasiswa yang mengambil matkul
+SELECT COUNT(DISTINCT tbl_mahasiswa.`NPM`) AS mahasiswa_yang_mengambil_matkul
+FROM tbl_mahasiswa INNER JOIN tbl_ambilmk ON tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM`;
+
+//2 urut berdasarkan jenkel
+SELECT jenis_kelamin, COUNT(jenis_kelamin) AS jumlah FROM tbl_mahasiswa LEFT OUTER JOIN tbl_ambilmk ON tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM` WHERE tbl_ambilmk.`NPM` IS NULL GROUP BY jenis_kelamin;
+
+//3 
+//nim dan nama mahasiswa yang mengambil matakuliah beserta kode_mk
+dana nama_mk yang diambilnya
+//explicit ver.
+SELECT tbl_mahasiswa.`NPM`, tbl_mahasiswa.`nama`, tbl_matakuliah.`kode_mk`, nama_mk FROM tbl_mahasiswa INNER JOIN tbl_ambilmk ON tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM` INNER JOIN tbl_matakuliah ON tbl_matakuliah.`kode_mk` = tbl_ambilmk.`kode_mk`;
+//implicit
+SELECT tbl_mahasiswa.`NPM`, tbl_mahasiswa.`nama`, tbl_matakuliah.`kode_mk`, tbl_matakuliah.`nama_mk` FROM tbl_mahasiswa, tbl_matakuliah, tbl_ambilmk WHERE tbl_matakuliah.`kode_mk` = tbl_ambilmk.`kode_mk` AND tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM`;
+
+//4
+//nim,nama, dan total sks yang diambil oleh mahasiswa
+//explicit 
+SELECT tbl_mahasiswa.`NPM`, tbl_mahasiswa.`nama`, SUM(sks) AS jumlah_sks FROM tbl_mahasiswa INNER JOIN tbl_ambilmk ON tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM` INNER JOIN tbl_matakuliah ON tbl_matakuliah.`kode_mk` = tbl_ambilmk.`kode_mk` GROUP BY tbl_mahasiswa.`nama` HAVING SUM(sks) > 4 AND SUM(sks) < 10;
+
+//5 
+//matkul yang tidak diambil mhs
+SELECT tbl_matakuliah.`kode_mk`, tbl_matakuliah.`nama_mk`, tbl_matakuliah.`sks`, tbl_matakuliah.`semester` FROM tbl_matakuliah LEFT OUTER JOIN tbl_ambilmk ON tbl_matakuliah.`kode_mk` = tbl_ambilmk.`kode_mk` LEFT OUTER JOIN tbl_mahasiswa ON tbl_mahasiswa.`NPM` = tbl_ambilmk.`NPM` WHERE tbl_mahasiswa.`NPM` IS NULL;
